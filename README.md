@@ -16,7 +16,7 @@ The blue noise image can be used in Path Tracing to distribute the Monte Carlo n
 
 1D blue-noise:
 
-| Resolution | White noise                       | White noise FFT$^{[3]}$           | Blue noise | Blue noise FFT |
+| Resolution | White noise                       | White noise FFT [3]           | Blue noise | Blue noise FFT |
 | ---------- | --------------------------------- | -------------------------------------- | ---------- | -------------- |
 | 32x32      | ![](./results/white_noise_32.bmp) | ![](./results/white_noise_32_freq.bmp) | ![](./results/blue_noise_32.bmp)              |       ![](./results/blue_noise_32_freq.bmp)      |
 | 128x128    | ![](./results/white_noise_128.bmp) | ![](./results/white_noise_128_freq.bmp)      |     ![](./results/blue_noise_128.bmp)       |        ![](./results/blue_noise_128_freq.bmp)        |
