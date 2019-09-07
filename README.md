@@ -31,6 +31,17 @@ For example, use 16 128x128 blue noise generate 512x512:
 
 
 
+Here we show the path tracing results comparison of Cornell Box (only 1spp) :
+
+> Here I just implement the sorting scheme introduced in the slides [4].
+>
+> - sorting all the radiances of same pixel;
+> - pick the radiance according to the blue noise value in the same pixel position.
+
+![](./results/compare_pt.png)
+
+
+
 [1] Georgiev I, Fajardo M. Blue-noise dithered sampling[C]//ACM SIGGRAPH 2016 Talks. ACM, 2016: 35.
 
 https://www.arnoldrenderer.com/research/dither_abstract.pdf
@@ -40,3 +51,5 @@ https://www.arnoldrenderer.com/research/dither_abstract.pdf
 https://hal.archives-ouvertes.fr/hal-02158423/document
 
 [3] Use ./results/vis_image_freq.py to generate the frequency visualization image. Please see [OpenCV](https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_imgproc/py_transforms/py_fourier_transform/py_fourier_transform.html) for more details.
+
+[4] https://hal.archives-ouvertes.fr/hal-02158423/file/blueNoiseTemporal2019_slides.pdf
