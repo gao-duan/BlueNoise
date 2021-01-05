@@ -12,6 +12,16 @@ IF(CMAKE_BUILD_TYPE MATCHES RELEASE)
   ADD_DEFINITIONS (-DNDEBUG)
 ENDIF()
 
+
+if(NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/pybind11")
+  message(FATAL_ERROR "The dependency repositories (pybind11, pbar, etc.) are missing! "
+    "You probably did not clone the project with --recursive. It is possible to recover "
+    "by calling \"git submodule update --init --recursive"
+    "Calling git -c submodule."thirdparty/xxx".update=none  submodule update --init --recursive to ignore specific library.\"")
+endif()
+
+
+
 # Enable C++11 mode on GCC / Clang
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
@@ -44,7 +54,11 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}
 endif()
 
 
-add_executable(BlueNoiseGenerator 
-    generate_blue_noise.cpp)
+INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/pbar")
 
+add_executable(BlueNoiseGenerator 
+    src/generate_blue_noise.cpp)
+
+add_subdirectory(pybind11)
+    pybind11_add_module(PyBlueNoiseGenerator src/py_wrapper.cpp)
     
