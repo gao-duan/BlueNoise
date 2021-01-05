@@ -116,16 +116,15 @@ void generate_blue_noise(int x_resolution, int y_resolution, int depth, int max_
 	int size = x_resolution * y_resolution;
 
 	int progress_iters = int(float(max_iter) / 10.0f);
-
-	ProgressBar<std::vector<int>::iterator> pbar(v.begin(), v.end(), 50);
+	std::vector<int> progress_v;
+	for (size_t i = 0; i < max_iter; ++i) progress_v.push_back(i);
+	pbar::ProgressBar<std::vector<int>::iterator> pbar(progress_v.begin(), progress_v.end(), 50);
 	for (auto i = pbar.begin(); i != pbar.end(); i++) {
-		usleep(us);
-	}
-	for (int iter = 0; iter < max_iter; ++iter) {
+		int iter = *i;
 		int i = NextFloat() * (size - 1);
 		int j = NextFloat() * (size - 1);
 		if (i == j) continue;
-		
+
 		std::swap(blue_noise[i], blue_noise[j]);
 
 		Float new_loss = compute_blue_noise_loss(x_resolution, y_resolution, blue_noise, kernel_size);
@@ -152,6 +151,9 @@ void generate_blue_noise(int x_resolution, int y_resolution, int depth, int max_
 
 		img.save("blue_noise.bmp", 1.0f);
 	}
+	/*for (int iter = 0; iter < max_iter; ++iter) {
+		
+	}*/
 }
 
 int main(int argc, char** argv) {
