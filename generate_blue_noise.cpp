@@ -118,7 +118,7 @@ void  generate_blue_noise(int x_resolution, int y_resolution) {
 }
 
 int main() {
-	generate_blue_noise(512, 512);
+	generate_blue_noise(32, 32);
 	
 	return 0;
 }
