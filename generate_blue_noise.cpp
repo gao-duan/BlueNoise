@@ -14,7 +14,7 @@ Float DistanceSquared(Float x1, Float y1, Float x2, Float y2) {
 }
 
 // compute the loss function now
-Float compute_blue_noise_loss(int x_resolution, int y_resolution, const std::vector<Float>& blue_noise) {
+Float compute_blue_noise_loss(int x_resolution, int y_resolution, int depth, const std::vector<Float>& blue_noise) {
 		Float loss = 0;
 		const Float sigma_i = 2.1f;
 		const Float sigma_s = 1.0f;
@@ -59,19 +59,38 @@ Float compute_blue_noise_loss(int x_resolution, int y_resolution, const std::vec
 	}
 
 
-void  generate_blue_noise(int x_resolution, int y_resolution) {
+void  generate_blue_noise(int x_resolution, int y_resolution, int depth = 1) {
         std::vector<Float> blue_noise;
-		blue_noise.resize(x_resolution * y_resolution);
+		blue_noise.resize(x_resolution * y_resolution * depth);
 
 		// 1. generate white noise.
-		for (size_t i = 0; i < x_resolution * y_resolution; ++i)
+		for (size_t i = 0; i < x_resolution * y_resolution * depth; ++i)
 			blue_noise[i] = NextFloat();
+
+		int size = x_resolution * y_resolution;
 
 		ImageRGB img_white(x_resolution, y_resolution);
 		for (int x = 0; x < x_resolution; ++x) {
 			for (int y = 0; y < y_resolution; ++y) {
-				Float v = blue_noise[y * x_resolution + x];
-				Color color(v, v, v);
+				Color color;
+
+				if (depth == 0) {
+					Float v = blue_noise[y * x_resolution + x];
+					color = Color(v, v, v);
+				}
+				else if (depth == 2) {
+					Float r = blue_noise[y * x_resolution + x];
+					Float g = blue_noise[size + y * x_resolution + x];
+					color = Color(r, g, 0);
+				}
+				else {
+					Float r = blue_noise[y * x_resolution + x];
+					Float g = blue_noise[size + y * x_resolution + x];
+					Float b = blue_noise[size * 2 + y * x_resolution + x];
+
+					color = Color(r, g, b);
+				}
+
 				img_white.Set(x, y, color);
 			}
 		}
@@ -79,23 +98,30 @@ void  generate_blue_noise(int x_resolution, int y_resolution) {
 
 		// 2. random swap two pixels to minimize the loss
 		Float loss = compute_blue_noise_loss(x_resolution, y_resolution, blue_noise);
-		int size = x_resolution * y_resolution;
 
 		const int maxIter = 1000000;
 		for(int iter = 0; iter<maxIter;++iter) {
 			int i = NextFloat() * (size - 1);
 			int j = NextFloat() * (size - 1);
 			if (i == j) continue;
-			Float tmp = blue_noise[i];
-			blue_noise[i] = blue_noise[j];
-			blue_noise[j] = tmp;
-			Float new_loss = compute_blue_noise_loss(x_resolution, y_resolution, blue_noise);
+
+			for (int d = 0; d < depth; ++d) {
+				int base = d * size;
+				Float tmp = blue_noise[base + i];
+				blue_noise[base + i] = blue_noise[base + j];
+				blue_noise[base + j] = tmp;
+			}
+			
+			Float new_loss = compute_blue_noise_loss(x_resolution, y_resolution, depth, blue_noise);
 
 			// swap back.
 			if (new_loss > loss) {
-				Float tmp = blue_noise[i];
-				blue_noise[i] = blue_noise[j];
-				blue_noise[j] = tmp;
+				for (int d = 0; d < depth; ++d) {
+					int base = d * size;
+					Float tmp = blue_noise[base + i];
+					blue_noise[base + i] = blue_noise[base + j];
+					blue_noise[base + j] = tmp;
+				}
 			}
 			else {
 				loss = new_loss;
@@ -108,8 +134,25 @@ void  generate_blue_noise(int x_resolution, int y_resolution) {
 				ImageRGB img(x_resolution, y_resolution);
 				for (int x = 0; x < x_resolution; ++x) {
 					for (int y = 0; y < y_resolution; ++y) {
-						Float v = blue_noise[y * x_resolution + x];
-						Color color(v, v, v);
+						Color color;
+		
+						if (depth == 0) {
+							Float v = blue_noise[y * x_resolution + x];
+							color = Color(v, v, v);
+						}
+						else if (depth == 2) {
+							Float r = blue_noise[y * x_resolution + x];
+							Float g = blue_noise[size + y * x_resolution + x];
+							color = Color(r, g, 0);
+						}
+						else {
+							Float r = blue_noise[y * x_resolution + x];
+							Float g = blue_noise[size + y * x_resolution + x];
+							Float b = blue_noise[size * 2 + y * x_resolution + x];
+
+							color = Color(r, g, b);
+						}
+
 						img.Set(x, y, color);
 					}
 				}
