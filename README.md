@@ -37,7 +37,13 @@ Here we show the path tracing results comparison of Cornell Box (only 1spp) :
 > - sorting all the radiances of same pixel;
 > - pick the radiance according to the blue noise value in the same pixel position.
 
-![](./results/compare_pt.png)
+
+
+|       |   path tracing(spp=1)   |        dithering(spp=1 from 256)        |   path tracing(spp=256)   |       reference       |
+| ----- | :---------------------: | :-------------------------------------: | :-----------------------: | :-------------------: |
+| Image | ![](./results/spp1.png) | ![](./results/spp1_dither_from_256.png) | ![](./results/spp256.png) | ![](./results/gt.png) |
+| RMSE  |         0.04736         |                 0.04778                 |         0.003352          |           -           |
+
 
 
 
