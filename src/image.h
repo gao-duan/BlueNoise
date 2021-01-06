@@ -1,6 +1,7 @@
 #pragma once
 #include "CImg.h"
 #include <string>
+
 typedef float Float;
 
 
@@ -153,7 +154,20 @@ public:
 		pixels[y * width + x] = v;
 		return true;
 	}
-	
+
+	bool Set(int x, int y, const std::vector<Float>& v) {
+		Color c(0, 0, 0);
+		if (v.size() == 1) {
+			c = Color(v[0], v[0], v[0]);
+		}
+		else if (v.size() == 2) {
+			c = Color(v[0], v[1], 0.0f);
+		}
+		else if (v.size() >= 3) {
+			c = Color(v[0], v[1], v[2]);
+		}
+		return Set(x, y, c);
+	}
 
 	int GetWidth() const { return width; }
 	int GetHeight() const { return height; }
