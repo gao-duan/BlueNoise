@@ -57,8 +57,8 @@ endif()
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/pbar")
 
 add_executable(BlueNoiseGenerator 
-    src/generate_blue_noise.cpp)
+    src/main.cpp src/generate_blue_noise.cpp src/generate_blue_noise.h)
 
 add_subdirectory(pybind11)
-    pybind11_add_module(PyBlueNoiseGenerator src/py_wrapper.cpp)
+    pybind11_add_module(PyBlueNoiseGenerator src/py_wrapper.cpp src/generate_blue_noise.h src/generate_blue_noise.cpp)
     
