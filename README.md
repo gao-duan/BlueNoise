@@ -6,11 +6,18 @@ Implement the algorithm introduced in [1].
 
 The blue noise image can be used in Path Tracing to distribute the Monte Carlo noise from white noise to blue noise (I have tested this idea in my own physically based renderer [Elegans](https://github.com/gao-duan/Elegans)) , more details are described in [2]. 
 
+**Update[2020-01-06]**
+
+- Add Python binding support (via [pybind11](https://github.com/pybind/pybind11/tree/98f1bbb8004f654ba9e26717bdf5912fb899b05a))
+- Add support for generating multiple dimensional blue noise texture. (e.g 2D/3D blue noise texture)
+
 ## Dependencies
 
 - [CImg](https://github.com/dtschump/CImg)
 - OpenMP support
 - C++ 11
+- [pybind11](https://github.com/pybind/pybind11)
+- [pbar](https://github.com/Jvanrhijn/pbar)
 
 ## Results
 
@@ -21,15 +28,7 @@ The blue noise image can be used in Path Tracing to distribute the Monte Carlo n
 | 32x32      | ![](./results/white_noise_32.bmp) | ![](./results/white_noise_32_freq.bmp) | ![](./results/blue_noise_32.bmp)              |       ![](./results/blue_noise_32_freq.bmp)      |
 | 128x128    | ![](./results/white_noise_128.bmp) | ![](./results/white_noise_128_freq.bmp)      |     ![](./results/blue_noise_128.bmp)       |        ![](./results/blue_noise_128_freq.bmp)        |
 
-For higher resolution, we can generate it by tiling low-resolution result.
-
-For example, use 16 128x128 blue noise generate 512x512:
-
-> ![](./results/blue_noise_128.bmp) (128x128)
->
-> ![](./results/blue_noise_512.bmp) (512x512)
-
-
+ 
 
 Here we show the path tracing results comparison of Cornell Box (only 1spp) :
 
